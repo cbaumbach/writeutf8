@@ -7,23 +7,27 @@ df_to_text <- function(df) {
 }
 
 collapse_header <- function(df) {
-    paste(names(df), collapse = "\t")
+    paste(quote(names(df)), collapse = "\t")
 }
 
 collapse_columns <- function(df) {
     do.call(function(...) paste(..., sep = "\t"), quote_columns(df))
 }
 
-# Embedded double quotes are doubled (""), not escaped (\"), so that
-# read.table with sep = "\t" recognizes them (see ?scan for details).
 quote_columns <- function(df) {
     lapply(unname(df[]), function(x) {
         if (is.character(x) && length(x) > 0L) {
-            paste0('"', gsub('"', '""', x), '"')
+            quote(x)
         } else {
             x
         }
     })
+}
+
+# Embedded double quotes are doubled (""), not escaped (\"), so that
+# read.table with sep = "\t" recognizes them (see ?scan for details).
+quote <- function(x) {
+    paste0('"', gsub('"', '""', x), '"')
 }
 
 write_without_reencoding <- function(text, filename) {

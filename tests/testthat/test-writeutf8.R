@@ -12,6 +12,11 @@ test_that("text with embedded double quotes works", {
     expect_read_equal_write(data.frame(x = '"'))
 })
 
+test_that("column names with embedded quotes work", {
+    df <- data.frame(`"` = 1L, check.names = FALSE)
+    expect_read_equal_write(df)
+})
+
 test_that("data frames with 0 rows work", {
     # Note that we have to pass colClasses through to readutf8 since
     # read.table, the workhorse behind readutf8, cannot infer column
