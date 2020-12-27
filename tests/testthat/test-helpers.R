@@ -41,3 +41,26 @@ test_that("data frame has at least one row", {
         expect_gte(nrow(random_data_frame()), 1)
     }
 })
+
+test_that("is_ambiguous works", {
+    expect_true(is_ambiguous(data.frame(x = " ")))
+    expect_true(is_ambiguous(data.frame(x = integer(0))))
+    expect_false(is_ambiguous(data.frame(x = 1)))
+})
+
+test_that("is_whitespace_only", {
+    expect_true(is_whitespace_only(" "))
+    expect_true(is_whitespace_only("\t"))
+    expect_true(is_whitespace_only("\r"))
+    expect_true(is_whitespace_only("\n"))
+    expect_false(is_whitespace_only("a"))
+    expect_false(is_whitespace_only(" a"))
+    expect_false(is_whitespace_only(1))
+})
+
+test_that("random data frame is never ambiguous", {
+    set.seed(1)
+    for (i in 1:10) {
+        expect_false(is_ambiguous(random_data_frame()))
+    }
+})

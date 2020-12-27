@@ -76,8 +76,15 @@ random_character <- function(n, nchars) {
     as.character(replicate(n, random_string(nchars)))
 }
 
+# Return a random data frame that can be uniquely reconstructed from
+# its written representation as produced by writeutf8.
 random_data_frame <- function() {
-    random_df(ncols = sample.int(3, 1), nrows = sample.int(3, 1))
+    df <-  random_df(ncols = sample.int(3, 1), nrows = sample.int(3, 1))
+    if (is_ambiguous(df)) {
+        random_data_frame()
+    } else {
+        df
+    }
 }
 
 random_df <- function(ncols, nrows) {
@@ -94,4 +101,14 @@ random_columns <- function(ncols, nrows) {
     FUNS <- list(random_logical, random_integer, random_double,
                  function(n) random_character(n, sample.int(4, 1)))
     lapply(sample(FUNS, ncols, replace = TRUE), function(f) f(nrows))
+}
+
+# Return TRUE for data frames that cannot be uniquely reconstructed
+# based on their written representation as produced by writeutf8.
+is_ambiguous <- function(df) {
+    nrow(df) == 0 || any(sapply(df, is_whitespace_only))
+}
+
+is_whitespace_only <- function(x) {
+    is.character(x) && all(grepl("^[ \t\r\n]*$", x))
 }
