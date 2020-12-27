@@ -1,0 +1,18 @@
+Package: writeutf8
+Title: Save Data Frame As UTF-8-Encoded Plain Text under MS Windows
+Version: 0.0.0.9000
+Authors@R: 
+    person(given = "Clemens",
+           family = "Baumbach",
+           role = c("aut", "cre"),
+           email = "clemens.baumbach@gmx.net")
+Description:
+    This package allows R users working under MS Windows to save their
+    data frames as UTF-8-encoded plain text files.
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.1.1
+Suggests: 
+    testthat
