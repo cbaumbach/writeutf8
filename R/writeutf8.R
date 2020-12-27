@@ -11,7 +11,15 @@ collapse_header <- function(df) {
 }
 
 collapse_columns <- function(df) {
-    do.call(function(...) paste(..., sep = "\t"), unname(df[]))
+    do.call(function(...) paste(..., sep = "\t"), quote_columns(df))
+}
+
+# Embedded double quotes are doubled (""), not escaped (\"), so that
+# read.table with sep = "\t" recognizes them (see ?scan for details).
+quote_columns <- function(df) {
+    lapply(unname(df[]), function(x) {
+        paste0('"', gsub('"', '""', x), '"')
+    })
 }
 
 write_without_reencoding <- function(text, filename) {

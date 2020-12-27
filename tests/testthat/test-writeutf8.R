@@ -8,6 +8,10 @@ test_that("column names with UTF-8 encoding work", {
     expect_read_equal_write(df)
 })
 
+test_that("text with embedded double quotes works", {
+    expect_read_equal_write(data.frame(x = '"'))
+})
+
 test_that("random data frames work", {
     set.seed(1234)
     for (i in 1:100) {
