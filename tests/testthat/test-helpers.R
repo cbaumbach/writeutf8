@@ -59,7 +59,6 @@ test_that("is_whitespace_only", {
 })
 
 test_that("random data frame is never ambiguous", {
-    set.seed(1)
     for (i in 1:10) {
         expect_false(is_ambiguous(random_data_frame()))
     }

@@ -35,7 +35,6 @@ test_that("a whitespace-only column is read back as logical NA", {
 })
 
 test_that("random data frames work", {
-    set.seed(1234)
     for (i in 1:100) {
         if (!expect_read_equal_write(random_data_frame())) {
             break
