@@ -18,7 +18,11 @@ collapse_columns <- function(df) {
 # read.table with sep = "\t" recognizes them (see ?scan for details).
 quote_columns <- function(df) {
     lapply(unname(df[]), function(x) {
-        paste0('"', gsub('"', '""', x), '"')
+        if (is.character(x) && length(x) > 0L) {
+            paste0('"', gsub('"', '""', x), '"')
+        } else {
+            x
+        }
     })
 }
 
