@@ -2,7 +2,7 @@ expect_read_equal_write <- function(df) {
     filename <- tempfile()
     on.exit(file.remove(filename))
     writeutf8(df, filename)
-    expect_equal_df(df, readutf8(filename))
+    expect_equal_df(df, readutf8(filename, check.names = FALSE))
 }
 
 expect_equal_df <- function(expected, actual) {
