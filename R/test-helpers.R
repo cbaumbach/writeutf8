@@ -59,9 +59,7 @@ random_double <- function(n) {
 
 random_char <- function() {
     sample(c(
-        " ", "\t", "\n",  # whitespace
-        "a",
-        "ß",
+        " ", "\t", "\n", "'", '"', "\\", "a", "ß",
         "\u0105",  # ą
         "\u0328",  # ogonek (little tail in ą)
         "\u0141",  # Ł
