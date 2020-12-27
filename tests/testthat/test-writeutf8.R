@@ -27,6 +27,13 @@ test_that("data frames with 0 rows work", {
         colClasses = c("integer", "character"))
 })
 
+test_that("a whitespace-only column is read back as logical NA", {
+    filename <- tempfile()
+    on.exit(file.remove(filename))
+    writeutf8(data.frame(x = " "), filename)
+    expect_equal_df(data.frame(x = NA), readutf8(filename))
+})
+
 test_that("random data frames work", {
     set.seed(1234)
     for (i in 1:100) {
