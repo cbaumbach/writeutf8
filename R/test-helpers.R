@@ -100,15 +100,28 @@ columns_to_df <- function(...) {
 random_columns <- function(ncols, nrows) {
     FUNS <- list(random_logical, random_integer, random_double,
                  function(n) random_character(n, sample.int(4, 1)))
-    lapply(sample(FUNS, ncols, replace = TRUE), function(f) f(nrows))
+    prob <- 1 / (nrows + 1)
+    lapply(sample(FUNS, ncols, replace = TRUE),
+           function(f) add_random_missings(f(nrows), prob = prob))
+}
+
+add_random_missings <- function(x, prob) {
+    x[runif(length(x)) <= prob] <- NA
+    x
 }
 
 # Return TRUE for data frames that cannot be uniquely reconstructed
 # based on their written representation as produced by writeutf8.
 is_ambiguous <- function(df) {
-    nrow(df) == 0 || any(sapply(df, is_whitespace_only))
+    (nrow(df) == 0
+        || any(sapply(df, is_missing_only))
+        || any(sapply(df, is_whitespace_only)))
+}
+
+is_missing_only <- function(x) {
+    all(is.na(x))
 }
 
 is_whitespace_only <- function(x) {
-    is.character(x) && all(grepl("^[ \t\r\n]*$", x))
+    is.character(x) && all(is.na(x) | grepl("^[ \t\r\n]*$", x))
 }
