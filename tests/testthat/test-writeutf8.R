@@ -34,6 +34,13 @@ test_that("a whitespace-only column is read back as logical NA", {
     expect_equal_df(data.frame(x = NA), readutf8(filename))
 })
 
+test_that("a missing-only column is read back as logical NA", {
+    filename <- tempfile()
+    on.exit(file.remove(filename))
+    writeutf8(data.frame(x = NA_character_), filename)
+    expect_equal_df(data.frame(x = NA), readutf8(filename))
+})
+
 # scan converts all end-of-line sequences to newlines.  Even when they
 # are embedded in quoted strings!  The latter is not documented.  The
 # closest I could find is the following excerpt from ?scan:
