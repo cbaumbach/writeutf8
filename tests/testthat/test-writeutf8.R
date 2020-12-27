@@ -34,6 +34,36 @@ test_that("a whitespace-only column is read back as logical NA", {
     expect_equal_df(data.frame(x = NA), readutf8(filename))
 })
 
+# scan converts all end-of-line sequences to newlines.  Even when they
+# are embedded in quoted strings!  The latter is not documented.  The
+# closest I could find is the following excerpt from ?scan:
+#
+#   Whatever mode the connection is opened in, any of LF, CRLF or CR
+#   will be accepted as the EOL marker for a line and so will match
+#   sep = "\n".
+
+test_that("scan converts embedded end-of-line sequences to \\n", {
+    scan <- function(text) {
+        base::scan(text = text, what = "", quote = '"', quiet = TRUE)
+    }
+    expect_equal(scan('"\n"'), "\n")
+    expect_equal(scan('"\r"'), "\n")
+    expect_equal(scan('"\r\n"'), "\n")
+})
+
+# It follows that read.table, which uses scan under the hood, cannot
+# be used to read a string containing embedded \r or \r\n from a file
+# into a data frame.  The string that ends up in the data frame will
+# have its \r or \r\n replaced by \n.
+
+test_that("embedded \\r or \\r\\n are replaced by \\n", {
+    filename <- tempfile()
+    on.exit(file.remove(filename))
+    writeutf8(data.frame(x = c("\r", "\r\n")), filename)
+    expect_equal_df(data.frame(x = c("\n", "\n")),
+                    readutf8(filename, colClasses = "character"))
+})
+
 test_that("random data frames work", {
     for (i in 1:100) {
         if (!expect_read_equal_write(random_data_frame())) {
