@@ -1,1 +1,2 @@
 writeutf8.Rproj eol=crlf
+tests/testthat/data/file.tsv eol=crlf

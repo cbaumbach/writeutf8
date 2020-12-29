@@ -17,7 +17,7 @@ collapse_columns <- function(df, na) {
 quote_columns <- function(df, na) {
     lapply(unname(df[]), function(x) {
         if (is.character(x) && length(x) > 0L) {
-            ifelse(is.na(x), na, quote(x))
+            ifelse(is.na(x), quote(na), quote(x))
         } else {
             ifelse(is.na(x), na, x)
         }

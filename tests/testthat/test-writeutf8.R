@@ -7,6 +7,20 @@ test_that("data frame with mix of ascii, latin1, and UTF-8 works", {
     expect_read_equal_write(df)
 })
 
+test_that("output file matches reference file byte for byte", {
+    filename <- tempfile()
+    on.exit(file.remove(filename))
+    df <- data.frame(     # ascii  latin1  UTF-8
+        w = c(NA,    "",    "abc", "\xd8", "\u9B3C"),  # character
+        x = c(1L,    NA,    3L,    4L,     5L),        # integer
+        y = c(1.5,   2.5,   NA,    4.5,    5.5),       # double
+        z = c(TRUE,  FALSE, TRUE,  NA,     TRUE))      # logical
+    writeutf8(df, filename)
+    expect_identical(
+        readChar(filename, 100, useBytes = TRUE),
+        readChar("data/file.tsv", 100, useBytes = TRUE))
+})
+
 test_that("column names with UTF-8 encoding work", {
     expect_read_equal_write(
         structure(data.frame(1L), names = "\u9B3C"),

@@ -1,0 +1,6 @@
+"w"	"x"	"y"	"z"
+"NA"	1	1.5	TRUE
+""	NA	2.5	FALSE
+"abc"	3	NA	TRUE
+"Ø"	4	4.5	NA
+"鬼"	5	5.5	TRUE
