@@ -1,25 +1,25 @@
-writeutf8 <- function(df, filename) {
-    write_without_reencoding(enc2utf8(df_to_text(df)), filename)
+writeutf8 <- function(df, filename, na = "NA") {
+    write_without_reencoding(enc2utf8(df_to_text(df, na)), filename)
 }
 
-df_to_text <- function(df) {
-    c(collapse_header(df), collapse_columns(df))
+df_to_text <- function(df, na) {
+    c(collapse_header(df), collapse_columns(df, na))
 }
 
 collapse_header <- function(df) {
     paste(quote(names(df)), collapse = "\t")
 }
 
-collapse_columns <- function(df) {
-    do.call(function(...) paste(..., sep = "\t"), quote_columns(df))
+collapse_columns <- function(df, na) {
+    do.call(function(...) paste(..., sep = "\t"), quote_columns(df, na))
 }
 
-quote_columns <- function(df) {
+quote_columns <- function(df, na) {
     lapply(unname(df[]), function(x) {
         if (is.character(x) && length(x) > 0L) {
-            quote(x)
+            ifelse(is.na(x), na, quote(x))
         } else {
-            x
+            ifelse(is.na(x), na, x)
         }
     })
 }
