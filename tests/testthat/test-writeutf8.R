@@ -8,9 +8,9 @@ test_that("data frame with mix of ascii, latin1, and UTF-8 works", {
 })
 
 test_that("column names with UTF-8 encoding work", {
-    df <- structure(data.frame(1L), names = "\u9B3C")
-    expect_equal(Encoding(names(df)), "UTF-8")
-    expect_read_equal_write(df)
+    expect_read_equal_write(
+        structure(data.frame(1L), names = "\u9B3C"),
+        readutf8_extra_args = list(check.names = FALSE))
 })
 
 test_that("text with embedded double quotes works", {
@@ -18,8 +18,9 @@ test_that("text with embedded double quotes works", {
 })
 
 test_that("column names with embedded quotes work", {
-    df <- data.frame(`"` = 1L, check.names = FALSE)
-    expect_read_equal_write(df)
+    expect_read_equal_write(
+        data.frame(`"` = 1L, check.names = FALSE),
+        readutf8_extra_args = list(check.names = FALSE))
 })
 
 test_that("data frames with 0 rows work", {
@@ -79,7 +80,10 @@ test_that("embedded \\r or \\r\\n are replaced by \\n", {
 
 test_that("random data frames work", {
     for (i in 1:100) {
-        if (!expect_read_equal_write(random_data_frame())) {
+        ok <- expect_read_equal_write(
+            random_data_frame(),
+            readutf8_extra_args = list(check.names = FALSE))
+        if (!ok) {
             break
         }
     }
