@@ -1,5 +1,5 @@
-writeutf8 <- function(df, filename, na = "NA") {
-    write_without_reencoding(enc2utf8(df_to_text(df, na)), filename)
+writeutf8 <- function(df, filename, na = "NA", eol = "\r\n") {
+    write_without_reencoding(enc2utf8(df_to_text(df, na)), filename, eol)
 }
 
 df_to_text <- function(df, na) {
@@ -30,10 +30,10 @@ quote <- function(x) {
     paste0('"', gsub('"', '""', x), '"')
 }
 
-write_without_reencoding <- function(text, filename) {
+write_without_reencoding <- function(text, filename, eol) {
     con <- file(filename, open = "wb", encoding = "native.enc")
     on.exit(close(con))
-    writeLines(text, con, sep = "\n", useBytes = TRUE)
+    writeLines(text, con, sep = eol, useBytes = TRUE)
 }
 
 readutf8 <- function(filename, ...) {

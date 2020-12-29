@@ -55,6 +55,20 @@ test_that("we can choose how NAs are represented when written", {
         readutf8_extra_args = list(na.strings = "foo"))
 })
 
+test_that("end-of-line sequence in output defaults to \\r\\n", {
+    filename <- tempfile()
+    on.exit(file.remove(filename))
+    writeutf8(data.frame(x = 1), filename)
+    expect_match(readChar(filename, 20, useBytes = TRUE), "\\r\\n")
+})
+
+test_that("we can change the end-of-line sequence in output", {
+    filename <- tempfile()
+    on.exit(file.remove(filename))
+    writeutf8(data.frame(x = 1), filename, eol = "\n")
+    expect_false(grepl("\\r\\n", readChar(filename, 20, useBytes = TRUE)))
+})
+
 # scan converts all end-of-line sequences to newlines.  Even when they
 # are embedded in quoted strings!  The latter is not documented.  The
 # closest I could find is the following excerpt from ?scan:
