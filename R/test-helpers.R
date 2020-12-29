@@ -1,8 +1,20 @@
-expect_read_equal_write <- function(df, ...) {
+expect_read_equal_write <- function(
+    df,
+    writeutf8_extra_args = NULL,
+    readutf8_extra_args = NULL)
+{
+    if (is.null(readutf8_extra_args)) {
+        readutf8_extra_args <- list(check.names = FALSE)
+    }
+    if (is.null(writeutf8_extra_args)) {
+        writeutf8_extra_args <- list()
+    }
+    write <- function(...) writeutf8(df, filename, ...)
+    read <- function(...) readutf8(filename, ...)
     filename <- tempfile()
     on.exit(file.remove(filename))
-    writeutf8(df, filename)
-    expect_equal_df(df, readutf8(filename, check.names = FALSE, ...))
+    do.call(write, writeutf8_extra_args)
+    expect_equal_df(df, do.call(read, readutf8_extra_args))
 }
 
 expect_equal_df <- function(expected, actual) {

@@ -24,7 +24,8 @@ test_that("data frames with 0 rows work", {
     # default columns in an empty table to logical.
     expect_read_equal_write(
         data.frame(x = integer(0), y = character(0)),
-        colClasses = c("integer", "character"))
+        readutf8_extra_args = list(
+            colClasses = c("integer", "character")))
 })
 
 test_that("a whitespace-only column is read back as logical NA", {
