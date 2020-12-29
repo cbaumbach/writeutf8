@@ -1,5 +1,10 @@
-test_that("integer columns work", {
-    expect_read_equal_write(data.frame(x = 1:2, y = 3:4))
+test_that("data frame with mix of ascii, latin1, and UTF-8 works", {
+    df <- data.frame(     # ascii  latin1  UTF-8
+        w = c(NA,    "",    "abc", "\xd8", "\u9B3C"),  # character
+        x = c(1L,    NA,    3L,    4L,     5L),        # integer
+        y = c(1.5,   2.5,   NA,    4.5,    5.5),       # double
+        z = c(TRUE,  FALSE, TRUE,  NA,     TRUE))      # logical
+    expect_read_equal_write(df)
 })
 
 test_that("column names with UTF-8 encoding work", {
