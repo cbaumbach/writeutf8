@@ -80,6 +80,7 @@ test_that("we can change the end-of-line sequence in output", {
     filename <- tempfile()
     on.exit(file.remove(filename))
     writeutf8(data.frame(x = 1), filename, eol = "\n")
+    expect_match(readChar(filename, 20, useBytes = TRUE), "\\n")
     expect_false(grepl("\\r\\n", readChar(filename, 20, useBytes = TRUE)))
 })
 
