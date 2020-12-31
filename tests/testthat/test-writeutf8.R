@@ -84,6 +84,20 @@ test_that("we can change the end-of-line sequence in output", {
     expect_false(grepl("\\r\\n", readChar(filename, 20, useBytes = TRUE)))
 })
 
+test_that("the column separator in output defaults to \\t", {
+    filename <- tempfile()
+    on.exit(file.remove(filename))
+    writeutf8(data.frame(x = 1, y = 2), filename)
+    expect_match(readChar(filename, 20, useBytes = TRUE), "\\t")
+})
+
+test_that("we can change the column separator in the output", {
+    filename <- tempfile()
+    on.exit(file.remove(filename))
+    writeutf8(data.frame(x = 1, y = 2), filename, sep = ",")
+    expect_match(readChar(filename, 20, useBytes = TRUE), ",")
+})
+
 # scan converts all end-of-line sequences to newlines.  Even when they
 # are embedded in quoted strings!  The latter is not documented.  The
 # closest I could find is the following excerpt from ?scan:

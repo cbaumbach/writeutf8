@@ -1,17 +1,17 @@
-writeutf8 <- function(df, filename, na = "NA", eol = "\r\n") {
-    write_without_reencoding(enc2utf8(df_to_text(df, na)), filename, eol)
+writeutf8 <- function(df, filename, sep = "\t", na = "NA", eol = "\r\n") {
+    write_without_reencoding(enc2utf8(df_to_text(df, sep, na)), filename, eol)
 }
 
-df_to_text <- function(df, na) {
-    c(collapse_header(df), collapse_columns(df, na))
+df_to_text <- function(df, sep, na) {
+    c(collapse_header(df, sep), collapse_columns(df, sep, na))
 }
 
-collapse_header <- function(df) {
-    paste(quote(names(df)), collapse = "\t")
+collapse_header <- function(df, sep) {
+    paste(quote(names(df)), collapse = sep)
 }
 
-collapse_columns <- function(df, na) {
-    do.call(function(...) paste(..., sep = "\t"), quote_columns(df, na))
+collapse_columns <- function(df, sep, na) {
+    do.call(function(...) paste(..., sep = sep), quote_columns(df, na))
 }
 
 quote_columns <- function(df, na) {
