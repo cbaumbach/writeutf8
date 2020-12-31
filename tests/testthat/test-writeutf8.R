@@ -98,6 +98,12 @@ test_that("we can change the column separator in the output", {
     expect_match(readChar(filename, 20, useBytes = TRUE), ",")
 })
 
+test_that("Date objects can be written and read back", {
+    expect_read_equal_write(
+        data.frame(t = Sys.Date()),
+        readutf8_extra_args = list(colClasses = "Date"))
+})
+
 # scan converts all end-of-line sequences to newlines.  Even when they
 # are embedded in quoted strings!  The latter is not documented.  The
 # closest I could find is the following excerpt from ?scan:

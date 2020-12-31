@@ -19,7 +19,7 @@ quote_columns <- function(df, na) {
         if (is.character(x) && length(x) > 0L) {
             ifelse(is.na(x), quote(na), quote(x))
         } else {
-            ifelse(is.na(x), na, x)
+            ifelse(is.na(x), na, as.character(x))
         }
     })
 }
