@@ -104,6 +104,15 @@ test_that("Date objects can be written and read back", {
         readutf8_extra_args = list(colClasses = "Date"))
 })
 
+test_that("POSIXct times lose subsecond precision", {
+    filename <- tempfile()
+    on.exit(file.remove(filename))
+    df <- data.frame(t = Sys.time())
+    writeutf8(df, filename)
+    df2 <- readutf8(filename, colClasses = "POSIXct")
+    expect_lte(df$t - df2$t, 1)
+})
+
 # scan converts all end-of-line sequences to newlines.  Even when they
 # are embedded in quoted strings!  The latter is not documented.  The
 # closest I could find is the following excerpt from ?scan:
