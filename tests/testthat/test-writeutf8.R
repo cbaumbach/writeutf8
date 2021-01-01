@@ -113,6 +113,17 @@ test_that("POSIXct times lose subsecond precision", {
     expect_lte(df$t - df2$t, 1)
 })
 
+test_that("POSIXct subsecond precision can be preserved manually", {
+    filename <- tempfile()
+    on.exit(file.remove(filename))
+    t <- Sys.time()
+    df <- data.frame(seconds = as.double(t))
+    writeutf8(df, filename)
+    df2 <- readutf8(filename)
+    df2$t <- as.POSIXct(df2$seconds, origin = "1970-01-01")
+    expect_equal(df2$t, t)
+})
+
 # scan converts all end-of-line sequences to newlines.  Even when they
 # are embedded in quoted strings!  The latter is not documented.  The
 # closest I could find is the following excerpt from ?scan:
