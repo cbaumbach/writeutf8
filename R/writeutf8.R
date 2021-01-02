@@ -11,22 +11,16 @@ collapse_header <- function(df, sep) {
 }
 
 collapse_columns <- function(df, sep, na) {
-    do.call(function(...) paste(..., sep = sep), quote_columns(df, na))
-}
-
-quote_columns <- function(df, na) {
-    lapply(unname(df[]), function(x) {
-        if (is.character(x) && length(x) > 0L) {
-            ifelse(is.na(x), quote(na), quote(x))
-        } else {
-            ifelse(is.na(x), na, as.character(x))
-        }
-    })
+    do.call(function(...) paste(..., sep = sep),
+            lapply(unname(df[]), quote))
 }
 
 # Embedded double quotes are doubled (""), not escaped (\"), so that
 # read.table with sep = "\t" recognizes them (see ?scan for details).
 quote <- function(x) {
+    if (length(x) == 0) {
+        return(character(0))
+    }
     paste0('"', gsub('"', '""', x), '"')
 }
 

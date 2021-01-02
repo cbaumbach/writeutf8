@@ -129,6 +129,25 @@ test_that("POSIXct subsecond precision can be preserved manually", {
     expect_equal(df2$t, t)
 })
 
+test_that("POSIXct columns are quoted", {
+    # POSIXct times are formatted as "YYYY-MM-DD hh:mm:ss TZ" in the
+    # output.  With sep = " ", they would be interpreted as multiple
+    # columns if unquoted.
+    expect_read_equal_write(
+        data.frame(t = trunc(Sys.time())),
+        writeutf8_extra_args = list(sep = " "),
+        readutf8_extra_args = list(sep = " ", colClasses = "POSIXct"))
+})
+
+test_that("double columns are quoted", {
+    # Double values contain a decimal point.  With sep = ".", a column
+    # of doubles would be interpreted as two columns if unquoted.
+    expect_read_equal_write(
+        data.frame(x = 1.5),
+        writeutf8_extra_args = list(sep = "."),
+        readutf8_extra_args = list(sep = "."))
+})
+
 # scan converts all end-of-line sequences to newlines.  Even when they
 # are embedded in quoted strings!  The latter is not documented.  The
 # closest I could find is the following excerpt from ?scan:
