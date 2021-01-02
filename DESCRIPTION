@@ -1,6 +1,6 @@
 Package: writeutf8
 Title: Save Data Frame As UTF-8-Encoded Plain Text under MS Windows
-Version: 0.0.0.9000
+Version: 1.0.0
 Authors@R: 
     person(given = "Clemens",
            family = "Baumbach",
