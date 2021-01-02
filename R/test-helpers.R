@@ -13,7 +13,7 @@ expect_read_equal_write <- function(
 
 expect_equal_df <- function(expected, actual) {
     if (!equal_df(expected, actual)) {
-        fail(utils::capture.output(suppressWarnings({
+        testthat::fail(utils::capture.output(suppressWarnings({
             cat(sprintf("\nGot %s\n\n", describe_df(actual)))
             print(actual)
             cat(sprintf("\nWant %s\n\n", describe_df(expected)))
@@ -21,7 +21,7 @@ expect_equal_df <- function(expected, actual) {
         })))
         return(FALSE)
     }
-    succeed()
+    testthat::succeed()
     return(TRUE)
 }
 
@@ -46,8 +46,8 @@ describe_df <- function(df) {
 
 test_random_vector <- function(random, type) {
     for (n in c(0, 3)) {
-        expect_equal(typeof(random(n)), type)
-        expect_equal(length(random(n)), n)
+        testthat::expect_equal(typeof(random(n)), type)
+        testthat::expect_equal(length(random(n)), n)
     }
 }
 
@@ -60,7 +60,7 @@ random_integer <- function(n) {
 }
 
 random_double <- function(n) {
-    round(runif(n, min=-10, max=10), digits = 2)
+    round(stats::runif(n, min=-10, max=10), digits = 2)
 }
 
 random_char <- function() {
@@ -119,7 +119,7 @@ random_columns <- function(ncols, nrows) {
 }
 
 add_random_missings <- function(x, prob) {
-    x[runif(length(x)) <= prob] <- NA
+    x[stats::runif(length(x)) <= prob] <- NA
     x
 }
 

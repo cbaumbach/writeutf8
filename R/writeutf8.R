@@ -110,9 +110,9 @@ readutf8 <- function(filename, stringsAsFactors = FALSE, ...) {
     # writeutf8 always doubles embedded double quotes.  Therefore,
     # readutf8 must never be called with sep = "" on a file with a
     # data frame containing embedded double quotes.
-    if (hasArg("sep") && list(...)$sep == "") {
+    if (methods::hasArg("sep") && list(...)$sep == "") {
         stop("Can't use sep = \"\". Specify separator explicitly.")
     }
-    read.delim(filename, encoding = "UTF-8",
-               stringsAsFactors = stringsAsFactors, ...)
+    utils::read.delim(filename, encoding = "UTF-8",
+                      stringsAsFactors = stringsAsFactors, ...)
 }
