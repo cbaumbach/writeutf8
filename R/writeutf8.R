@@ -36,6 +36,7 @@ write_without_reencoding <- function(text, filename, eol) {
     writeLines(text, con, sep = eol, useBytes = TRUE)
 }
 
-readutf8 <- function(filename, ...) {
-    read.delim(filename, encoding = "UTF-8", ...)
+readutf8 <- function(filename, stringsAsFactors = FALSE, ...) {
+    read.delim(filename, encoding = "UTF-8",
+               stringsAsFactors = stringsAsFactors, ...)
 }

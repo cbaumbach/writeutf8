@@ -37,6 +37,11 @@ test_that("column names with embedded quotes work", {
         readutf8_extra_args = list(check.names = FALSE))
 })
 
+test_that("character columns are not converted to factors by default", {
+    df <- data.frame(x = "a", stringsAsFactors = FALSE)
+    expect_read_equal_write(df)
+})
+
 test_that("data frames with 0 rows work", {
     # Note that we have to pass colClasses through to readutf8 since
     # read.table, the workhorse behind readutf8, cannot infer column
