@@ -12,7 +12,9 @@ collapse_header <- function(df, sep) {
 
 collapse_columns <- function(df, sep, na) {
     do.call(function(...) paste(..., sep = sep),
-            lapply(unname(df[]), quote))
+            lapply(unname(df[]), function(x) {
+                quote(ifelse(is.na(x), na, as.character(x)))
+            }))
 }
 
 # Embedded double quotes are doubled (""), not escaped (\"), so that

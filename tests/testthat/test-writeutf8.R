@@ -69,7 +69,7 @@ test_that("a missing-only column is read back as logical NA", {
 
 test_that("we can choose how NAs are represented when written", {
     expect_read_equal_write(
-        data.frame(x = "NA"),
+        data.frame(x = c("NA", NA)),
         writeutf8_extra_args = list(na = "foo"),
         readutf8_extra_args = list(na.strings = "foo"))
 })
