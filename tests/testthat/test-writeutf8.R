@@ -14,7 +14,9 @@ test_that("output file matches reference file byte for byte", {
         w = c(NA,    "",    "abc", "\xd8", "\u9B3C"),  # character
         x = c(1L,    NA,    3L,    4L,     5L),        # integer
         y = c(1.5,   2.5,   NA,    4.5,    5.5),       # double
-        z = c(TRUE,  FALSE, TRUE,  NA,     TRUE))      # logical
+        z = c(TRUE,  FALSE, TRUE,  NA,     TRUE),      # logical
+        t = as.POSIXct("2021-01-01 15:30:45"),         # POSIXct
+        d = as.Date("2021-01-01"))                     # Date
     writeutf8(df, filename)
     expect_identical(
         readChar(filename, 100, useBytes = TRUE),
