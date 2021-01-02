@@ -34,6 +34,14 @@ write_without_reencoding <- function(text, filename, eol) {
 }
 
 readutf8 <- function(filename, stringsAsFactors = FALSE, ...) {
+    # scan, which is used internally by read.table, expects embedded
+    # double quotes to be escaped when sep = "" and otherwise doubled.
+    # writeutf8 always doubles embedded double quotes.  Therefore,
+    # readutf8 must never be called with sep = "" on a file with a
+    # data frame containing embedded double quotes.
+    if (hasArg("sep") && list(...)$sep == "") {
+        stop("Can't use sep = \"\". Specify separator explicitly.")
+    }
     read.delim(filename, encoding = "UTF-8",
                stringsAsFactors = stringsAsFactors, ...)
 }

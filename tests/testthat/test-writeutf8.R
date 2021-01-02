@@ -31,6 +31,13 @@ test_that("text with embedded double quotes works", {
     expect_read_equal_write(data.frame(x = '"'))
 })
 
+test_that("we get an error if sep = \"\" in readutf8", {
+    filename <- tempfile()
+    on.exit(file.remove(filename))
+    writeutf8(data.frame(x = 1), filename)
+    expect_error(readutf8(filename, sep = ""))
+})
+
 test_that("column names with embedded quotes work", {
     expect_read_equal_write(
         data.frame(`"` = 1L, check.names = FALSE),
