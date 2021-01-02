@@ -77,7 +77,7 @@ random_char <- function() {
         "\u0328",  # ogonek (little tail in ą)
         "\u0141",  # Ł
         "\u20AC",  # €
-        "\u9B3C"   # 鬼
+        "\u9B3C"   # Chinese character
     ), 1)
 }
 
