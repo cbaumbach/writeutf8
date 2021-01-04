@@ -63,22 +63,38 @@ random_double <- function(n) {
     round(stats::runif(n, min=-10, max=10), digits = 2)
 }
 
+CHARS_AND_ENCODINGS <- c(
+    " ",      "unknown",
+    "\t",     "unknown",
+    "\n",     "unknown",
+    "'",      "unknown",
+    '"',      "unknown",
+    "\\",     "unknown",
+    "a",      "unknown",
+    "\xDF",   "latin1",  # ß
+    "\xC6",   "latin1",  # Æ
+    "\u00DF", "UTF-8",   # ß
+    "\u00C6", "UTF-8",   # Æ
+    "\u0105", "UTF-8",   # ą
+    "\u0328", "UTF-8",   # ogonek (little tail in ą)
+    "\u0141", "UTF-8",   # Ł
+    "\u20AC", "UTF-8",   # €
+    "\u9B3C", "UTF-8")   # Chinese character
+
+encode <- function(chars_and_encodings) {
+    chars <- chars_and_encodings[c(TRUE, FALSE)]
+    encodings <- chars_and_encodings[c(FALSE, TRUE)]
+    set_encoding <- function(char, enc) {
+        Encoding(char) <- enc
+        char
+    }
+    mapply(set_encoding, chars, encodings, USE.NAMES = FALSE)
+}
+
+CHARS <- encode(CHARS_AND_ENCODINGS)
+
 random_char <- function() {
-    sample(c(
-        # ASCII
-        " ", "\t", "\n", "'", '"', "\\", "a",
-        # latin1
-        "\xDF",    # ß
-        "\xC6",    # Æ
-        # UTF-8
-        "\u00DF",  # ß
-        "\u00C6",  # Æ
-        "\u0105",  # ą
-        "\u0328",  # ogonek (little tail in ą)
-        "\u0141",  # Ł
-        "\u20AC",  # €
-        "\u9B3C"   # Chinese character
-    ), 1)
+    sample(CHARS, 1)
 }
 
 random_string <- function(nchars) {

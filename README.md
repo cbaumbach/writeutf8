@@ -48,6 +48,8 @@ working under Windows.  Row names are not included in the output.
         t = as.POSIXct("2021-01-01 15:30:45"),       # POSIXct
         d = as.Date("2021-01-01"))                   # Date
 
+    Encoding(df$w) <- c(rep("unknown", 3), "latin1", "UTF-8")
+
     writeutf8(df, "data.tsv")
 
     # Then later in another R script:

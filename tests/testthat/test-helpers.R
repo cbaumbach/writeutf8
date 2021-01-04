@@ -10,6 +10,18 @@ test_that("random_double works", {
     test_random_vector(random_double, "double")
 })
 
+test_that("encode works", {
+    chars_and_encodings <- c(
+        NA,       "unknown",
+        "",       "unknown",
+        "abc",    "unknown",
+        "\xdf",   "latin1",
+        "\u00DF", "UTF-8")
+    x <- encode(chars_and_encodings)
+    encodings <- chars_and_encodings[c(FALSE, TRUE)]
+    expect_equal(Encoding(x), encodings)
+})
+
 test_that("random_char works", {
     for (i in 1:10) {
         expect_equal(nchar(random_char(), type = "chars"), 1)

@@ -1,22 +1,34 @@
 test_that("data frame with mix of ascii, latin1, and UTF-8 works", {
-    df <- data.frame(     # ascii  latin1  UTF-8
-        w = c(NA,    "",    "abc", "\xd8", "\u9B3C"),  # character
-        x = c(1L,    NA,    3L,    4L,     5L),        # integer
-        y = c(1.5,   2.5,   NA,    4.5,    5.5),       # double
-        z = c(TRUE,  FALSE, TRUE,  NA,     TRUE))      # logical
+    with_mixed_encodings <- encode(c(
+        NA,       "unknown",
+        "",       "unknown",
+        "abc",    "unknown",
+        "\xd8",   "latin1",
+        "\u9B3C", "UTF-8"))
+    df <- data.frame(
+        w = with_mixed_encodings,                 # character
+        x = c(1L,    NA,    3L,    4L,     5L),   # integer
+        y = c(1.5,   2.5,   NA,    4.5,    5.5),  # double
+        z = c(TRUE,  FALSE, TRUE,  NA,     TRUE)) # logical
     expect_read_equal_write(df)
 })
 
 test_that("output file matches reference file byte for byte", {
     filename <- tempfile()
     on.exit(file.remove(filename))
-    df <- data.frame(     # ascii  latin1  UTF-8
-        w = c(NA,    "",    "abc", "\xd8", "\u9B3C"),  # character
-        x = c(1L,    NA,    3L,    4L,     5L),        # integer
-        y = c(1.5,   2.5,   NA,    4.5,    5.5),       # double
-        z = c(TRUE,  FALSE, TRUE,  NA,     TRUE),      # logical
-        t = as.POSIXct("2021-01-01 15:30:45"),         # POSIXct
-        d = as.Date("2021-01-01"))                     # Date
+    with_mixed_encodings <- encode(c(
+        NA,       "unknown",
+        "",       "unknown",
+        "abc",    "unknown",
+        "\xd8",   "latin1",
+        "\u9B3C", "UTF-8"))
+    df <- data.frame(
+        w = with_mixed_encodings,                 # character
+        x = c(1L,    NA,    3L,    4L,     5L),   # integer
+        y = c(1.5,   2.5,   NA,    4.5,    5.5),  # double
+        z = c(TRUE,  FALSE, TRUE,  NA,     TRUE), # logical
+        t = as.POSIXct("2021-01-01 15:30:45"),    # POSIXct
+        d = as.Date("2021-01-01"))                # Date
     writeutf8(df, filename)
     expect_identical(
         readChar(filename, 100, useBytes = TRUE),
